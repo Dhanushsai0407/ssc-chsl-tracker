@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSC CHSL Tier 1 – 28-Day Master Preparation Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Complete 28-Day Todo List and Timetable tracker for SSC CHSL Tier 1 aspirants. Fixed 9:00 AM – 9:00 PM routine, daily question targets, mistake log and mock test tracking.">
+</head>
+<body>
+
+  <!-- Top Global Progress Bar -->
+  <header class="app-header">
+    <div class="global-progress-bar-wrap">
+      <div id="global-progress-bar-fill" class="global-progress-bar-fill"></div>
+    </div>
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-icon">🎯</span>
+        <div>
+          <h1>SSC CHSL 2026 <span class="badge-tier1">Tier 1</span></h1>
+          <span class="brand-subtitle">28-Day Master Prep Tracker • 9:00 AM – 9:00 PM</span>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-pill" title="Overall 28-day plan progress">
+          <span>Overall:</span> <strong id="overall-progress-pct">0%</strong>
+        </div>
+        <div class="stat-pill" title="Total Days Fully Completed">
+          <span>Days Done:</span> <strong id="days-completed-count">0/28 Days</strong>
+        </div>
+        <div class="stat-pill" title="Total Practice Questions Solved">
+          <span>Practice:</span> <strong id="total-questions-count">0 Qs Solved</strong>
+        </div>
+        <div class="stat-pill" id="live-clock-badge">
+          🕒 Current Time: --:--
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="btn btn-outline btn-sm">☀️ Light Mode</button>
+        <button id="print-plan-btn" class="btn btn-outline btn-sm" title="Print Today's Checklist">🖨️ Print</button>
+        <button id="export-data-btn" class="btn btn-ghost btn-sm" title="Export Backup JSON">💾 Backup</button>
+        <label class="btn btn-ghost btn-sm" title="Restore Backup JSON" style="cursor: pointer;">
+          📂 Restore
+          <input type="file" id="import-file-input" accept=".json" style="display: none;">
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <!-- Real-Time Schedule Alert Banner -->
+  <div id="current-live-slot-indicator" class="live-slot-banner off-hours">
+    <!-- Populated by JavaScript -->
+    <span>Loading live study schedule...</span>
+  </div>
+
+  <!-- Primary Navigation Tabs -->
+  <nav class="app-nav">
+    <button class="nav-tab active" data-tab="today">📅 Today's Focus</button>
+    <button class="nav-tab" data-tab="roadmap">🗺️ 28-Day Master Roadmap</button>
+    <button class="nav-tab" data-tab="mistakes">📓 Mistake & Error Notebook</button>
+    <button class="nav-tab" data-tab="guide">📋 Timetable & Strategy Guide</button>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+
+    <!-- ==================== TAB 1: TODAY'S FOCUS ==================== -->
+    <section id="tab-today" class="tab-view active">
+      
+      <!-- Day Switcher Bar -->
+      <div class="day-header-bar">
+        <div class="day-navigator">
+          <button id="prev-day-btn" class="btn btn-outline btn-sm">◀ Prev Day</button>
+          <select id="day-select" class="select-day-dropdown"></select>
+          <button id="next-day-btn" class="btn btn-outline btn-sm">Next Day ▶</button>
+        </div>
+
+        <div class="day-info-meta">
+          <div class="day-badge-row">
+            <h2 id="current-day-heading" style="font-size: 1.2rem;">Day 1 of 28</h2>
+            <span id="current-week-tag" class="week-tag">Week 1</span>
+            <span id="current-week-title" class="week-title-text">Build Your Basics</span>
+          </div>
+          <div id="current-week-goal" class="week-goal-text">🎯 Goal: Understand the fundamentals of all four subjects</div>
+        </div>
+
+        <div class="day-completion-toggle">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="mark-day-complete-checkbox">
+            <span class="checkmark"></span>
+            <strong>Mark Day 1 Fully Completed</strong>
+          </label>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        
+        <!-- Left Main Column -->
+        <div class="dashboard-left">
+
+          <!-- 4 Core Subjects Breakdown -->
+          <div class="section-title">
+            <span>📚 Today's Core Syllabus Checklist</span>
+          </div>
+          <div id="day-subjects-list" class="subjects-grid">
+            <!-- Rendered by JavaScript -->
+          </div>
+
+          <!-- Question Targets Section -->
+          <div class="question-targets-section">
+            <div class="section-title">
+              <span>🎯 Daily Question Solving Targets (Accuracy > Speed)</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+              Target: 95–115 questions daily. Track your solved count and log every wrong answer in your Mistake Notebook.
+            </p>
+            <div id="question-targets-grid" class="question-targets-grid">
+              <!-- Rendered by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Evening Practice & Daily Test Card -->
+          <div class="evening-test-card">
+            <div class="section-title">
+              <span>🌙 Evening PYQs, Practice & Daily Mock Test</span>
+            </div>
+            <div class="evening-items-grid">
+              <div class="evening-item-box">
+                <span class="time-info">6:15 PM – 7:00 PM (45 Mins)</span>
+                <span class="item-title">Maths & Reasoning Previous Year Questions (PYQs)</span>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="check-pyq">
+                  <span class="checkmark"></span>
+                  <span>Completed 45m PYQ Practice</span>
+                </label>
+              </div>
+
+              <div class="evening-item-box">
+                <span class="time-info">7:00 PM – 8:00 PM (60 Mins)</span>
+                <span class="item-title">English & General Awareness Practice</span>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="check-practice">
+                  <span class="checkmark"></span>
+                  <span>Completed Grammar & GK Drills</span>
+                </label>
+              </div>
+
+              <div class="evening-item-box" style="border-left: 3px solid var(--test-color);">
+                <span class="time-info">8:15 PM – 9:00 PM (45 Mins)</span>
+                <span class="item-title">Revision & Daily Sectional / Full Test</span>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="check-test">
+                  <span class="checkmark"></span>
+                  <span>Attempted Daily Test & Reviewed</span>
+                </label>
+                <div class="test-score-row">
+                  <span style="font-size: 12px; color: var(--text-muted);">Score/Marks:</span>
+                  <input type="text" id="test-score-input" class="test-score-input" placeholder="e.g. 42/50">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9:00 AM – 9:00 PM Daily Timetable Slots Checklist -->
+          <div class="schedule-container">
+            <div class="section-title">
+              <span>⏰ Full 9:00 AM – 9:00 PM Daily Slot Routine</span>
+            </div>
+            <div id="daily-slots-checklist" class="slots-list">
+              <!-- Rendered by JavaScript -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Utility Column -->
+        <div class="dashboard-right">
+          
+          <!-- Focus Pomodoro / Interval Timer -->
+          <div id="pomodoro-card" class="sidebar-utility-box timer-container">
+            <div class="section-title" style="justify-content: center;">
+              <span>⏱️ Focus Session Timer</span>
+            </div>
+            <div id="timer-task-name" class="timer-task-label">Focused on: Active Session</div>
+            <div id="timer-time-display" class="timer-time">45:00</div>
+            <div class="timer-presets">
+              <button class="btn btn-outline btn-xs timer-preset-btn" data-mins="45">45m Practice</button>
+              <button class="btn btn-outline btn-xs timer-preset-btn" data-mins="60">60m Concept</button>
+              <button class="btn btn-outline btn-xs timer-preset-btn" data-mins="15">15m Break</button>
+              <button class="btn btn-outline btn-xs timer-preset-btn" data-mins="30">30m Rapid</button>
+            </div>
+            <div class="timer-controls">
+              <button id="timer-start-btn" class="btn btn-primary">▶ Start Focus</button>
+              <button id="timer-reset-btn" class="btn btn-outline">↺ Reset</button>
+            </div>
+          </div>
+
+          <!-- Daily Quick Notes & Formulas -->
+          <div class="sidebar-utility-box">
+            <div class="section-title">
+              <span>📝 Today's Notes & Formulas</span>
+            </div>
+            <textarea id="day-quick-notes" class="quick-notes-textarea" placeholder="Jot down key formulas, difficult grammar rules, or static GK facts learned today..."></textarea>
+            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 6px;">
+              💾 Auto-saved automatically to your browser storage.
+            </span>
+          </div>
+
+          <!-- Motivational Quote Card -->
+          <div class="sidebar-utility-box" style="background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.25);">
+            <div id="daily-quote" style="font-size: 13.5px; line-height: 1.5; color: var(--text-main);">
+              💡 <em>"Consistency is what transforms average into excellence."</em>
+            </div>
+          </div>
+
+          <!-- Quick Tip Card -->
+          <div class="sidebar-utility-box">
+            <div class="section-title">
+              <span>💡 SSC CHSL Tip</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              <strong>The Golden 24-Hour Rule:</strong> Review every question you got wrong within 24 hours. A mistake revised becomes a guaranteed mark on exam day.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================== TAB 2: 28-DAY MASTER ROADMAP ==================== -->
+    <section id="tab-roadmap" class="tab-view">
+      <div style="margin-bottom: 16px;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">Full 28-Day Curriculum Roadmap</h2>
+        <p style="font-size: 13.5px; color: var(--text-muted);">
+          Every day has targeted topics across Quantitative Aptitude, Reasoning, English, and General Awareness. Click on any card to jump directly into that day's focus view.
+        </p>
+      </div>
+
+      <!-- Week Filters -->
+      <div class="week-filter-bar">
+        <button class="week-filter-pill active" data-week="all">All 28 Days</button>
+        <button class="week-filter-pill" data-week="1">Week 1: Basics (Days 1–7)</button>
+        <button class="week-filter-pill" data-week="2">Week 2: Arithmetic (Days 8–14)</button>
+        <button class="week-filter-pill" data-week="3">Week 3: Advanced Syllabus (Days 15–21)</button>
+        <button class="week-filter-pill" data-week="4">Week 4: PYQs & Mocks (Days 22–28)</button>
+      </div>
+
+      <!-- Grid of 28 Days -->
+      <div id="all-days-roadmap" class="all-days-grid">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 3: MISTAKE & ERROR NOTEBOOK ==================== -->
+    <section id="tab-mistakes" class="tab-view">
+      <div style="margin-bottom: 16px;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">📓 Mistake & Error Analysis Notebook</h2>
+        <p style="font-size: 13.5px; color: var(--text-muted);">
+          For each wrong answer, log the root reason: <strong>Concept not understood</strong>, <strong>Calculation mistake</strong>, <strong>Option confusion</strong>, or <strong>Blind guessing</strong>. Revise these daily!
+        </p>
+      </div>
+
+      <div class="mistakes-grid-layout">
+        
+        <!-- Left: Add Mistake Form -->
+        <div class="mistake-form-card">
+          <div class="section-title">
+            <span>➕ Log a Question Mistake</span>
+          </div>
+          <form id="add-mistake-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="mistake-day">Study Day:</label>
+                <input type="number" id="mistake-day" class="form-control" min="1" max="28" value="1">
+              </div>
+              <div class="form-group">
+                <label for="mistake-subject">Subject:</label>
+                <select id="mistake-subject" class="form-control">
+                  <option value="maths">Quantitative Aptitude</option>
+                  <option value="reasoning">Reasoning</option>
+                  <option value="english">English Language</option>
+                  <option value="gk">General Awareness</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="mistake-reason">Why did you get it wrong?</label>
+              <select id="mistake-reason" class="form-control">
+                <option value="concept">Concept Not Understood (Need Theory)</option>
+                <option value="calculation">Calculation Mistake (Silly Error)</option>
+                <option value="confusion">Confusion Between Options / Traps</option>
+                <option value="guessing">Blind Guessing / Time Pressure</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mistake-question-text">Question Details / Mistake Description:</label>
+              <textarea id="mistake-question-text" class="form-control" rows="3" placeholder="e.g. Ratio question where mixture was replaced with water twice; messed up the remaining ratio formula..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="mistake-correction-text">Correct Approach / Formula / Rule to Remember:</label>
+              <textarea id="mistake-correction-text" class="form-control" rows="2" placeholder="e.g. Formula: Remaining = Initial * (1 - x/C)^n. Don't multiply numerator twice."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Save to Mistake Notebook</button>
+          </form>
+        </div>
+
+        <!-- Right: Filtered Mistake List -->
+        <div class="mistakes-list-container">
+          <div id="mistake-reason-breakdown" class="mistake-reasons-summary">
+            <!-- Reason breakdown pills rendered here -->
+          </div>
+
+          <div class="mistakes-filter-bar">
+            <select id="mistake-subject-filter" class="form-control" style="width: auto;">
+              <option value="all">All Subjects</option>
+              <option value="maths">Maths Only</option>
+              <option value="reasoning">Reasoning Only</option>
+              <option value="english">English Only</option>
+              <option value="gk">GK Only</option>
+            </select>
+            <select id="mistake-reason-filter" class="form-control" style="width: auto;">
+              <option value="all">All Error Types</option>
+              <option value="concept">Concept Gap</option>
+              <option value="calculation">Calculation Slips</option>
+              <option value="confusion">Confusion</option>
+              <option value="guessing">Guessing</option>
+            </select>
+          </div>
+
+          <div id="mistakes-entries-list" class="mistakes-entries-list">
+            <!-- Rendered by JavaScript -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 4: TIMETABLE & STRATEGY GUIDE ==================== -->
+    <section id="tab-guide" class="tab-view">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">📋 SSC CHSL Tier 1 Syllabus & Preparation Blueprint</h2>
+        <p style="font-size: 13.5px; color: var(--text-muted);">
+          Master reference for your daily schedule, question targets, exam pattern, and weekly revision milestones.
+        </p>
+      </div>
+
+      <div class="strategy-guide-content">
+        
+        <!-- Card 1: 9:00 AM - 9:00 PM Timetable -->
+        <div class="guide-card">
+          <h3>⏰ Fixed Daily Schedule (9:00 AM – 9:00 PM)</h3>
+          <p>Strictly follow this disciplined 12-hour block (with built-in rest periods):</p>
+          <table class="guide-table">
+            <thead>
+              <tr>
+                <th>Time Window</th>
+                <th>Subject & Activity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>9:00–10:00 AM</td><td>Maths – Learn concepts & formulas</td></tr>
+              <tr><td>10:00–10:45 AM</td><td>Maths – Practice questions</td></tr>
+              <tr><td>10:45–11:00 AM</td><td><em>Break (Hydrate & stretch)</em></td></tr>
+              <tr><td>11:00 AM–12:00 PM</td><td>Reasoning – Learn concepts</td></tr>
+              <tr><td>12:00–1:00 PM</td><td>Reasoning – Practice questions</td></tr>
+              <tr><td>1:00–2:00 PM</td><td><em>Lunch break & relaxation</em></td></tr>
+              <tr><td>2:00–3:00 PM</td><td>English – Grammar and vocabulary</td></tr>
+              <tr><td>3:00–3:45 PM</td><td>English – Practice questions</td></tr>
+              <tr><td>3:45–4:00 PM</td><td><em>Short break</em></td></tr>
+              <tr><td>4:00–5:00 PM</td><td>GK – Static GK & General Studies</td></tr>
+              <tr><td>5:00–5:45 PM</td><td>Current Affairs & General Science</td></tr>
+              <tr><td>5:45–6:15 PM</td><td><em>Evening walk / break</em></td></tr>
+              <tr><td>6:15–7:00 PM</td><td>Maths & Reasoning PYQs</td></tr>
+              <tr><td>7:00–8:00 PM</td><td>English & GK practice</td></tr>
+              <tr><td>8:00–8:15 PM</td><td><em>Break / Dinner</em></td></tr>
+              <tr><td>8:15–9:00 PM</td><td>Revision & Daily Mock Test</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Card 2: Question Targets & Exam Pattern -->
+        <div class="guide-card">
+          <h3>🎯 Daily Question Targets & Exam Structure</h3>
+          <p>Solve these questions daily after finishing concepts:</p>
+          <table class="guide-table" style="margin-bottom: 18px;">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Daily Target</th>
+                <th>Tier 1 Weightage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Quantitative Aptitude</td><td>25–30 questions</td><td>25 Qs / 50 Marks</td></tr>
+              <tr><td>General Intelligence & Reasoning</td><td>25–30 questions</td><td>25 Qs / 50 Marks</td></tr>
+              <tr><td>English Language</td><td>25–30 questions</td><td>25 Qs / 50 Marks</td></tr>
+              <tr><td>General Awareness (GK)</td><td>20–25 questions</td><td>25 Qs / 50 Marks</td></tr>
+              <tr><strong>Total</strong></td><td><strong>95–115 Qs/day</strong></td><td><strong>100 Qs / 200 Marks</strong></td></tr>
+            </tbody>
+          </table>
+
+          <h4 style="font-size: 14px; margin-bottom: 6px; color: var(--text-main);">Tier 1 Exam Pattern Rules:</h4>
+          <ul>
+            <li><strong>Duration:</strong> 60 minutes for 100 questions.</li>
+            <li><strong>Marking Scheme:</strong> +2 marks for correct answer, <strong>-0.50 negative marking</strong> for every incorrect answer.</li>
+            <li><strong>Key to Clearance:</strong> High accuracy in Maths and Reasoning, swift solving in English and GK.</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: 5 Golden Strategy Rules -->
+        <div class="guide-card">
+          <h3>⭐ 5 Golden Preparation Rules</h3>
+          <ul>
+            <li><strong>1. Previous Year Questions (PYQs) Daily:</strong> SSC repeats question types regularly. Dedicate 6:15–7:00 PM strictly to PYQs from the last 5 years.</li>
+            <li><strong>2. Dedicated Revision on Days 7, 14, 21:</strong> Do not move forward without consolidating the previous 6 days. Take full sectional tests on revision days.</li>
+            <li><strong>3. Formula & Rules Notebook:</strong> Keep a pocket notebook for Maths identities, English idioms/grammar rules, and important GK dates/articles.</li>
+            <li><strong>4. Systematic Error Analysis:</strong> Spend 30 minutes every evening analyzing why a question was wrong. Never ignore a silly mistake.</li>
+            <li><strong>5. Final Week Mock Sprint (Days 22–28):</strong> Shift emphasis to full-length timed tests under exam pressure to master time allocation across the 4 sections.</li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Data Reset & Management -->
+        <div class="guide-card">
+          <h3>⚙️ Data & Settings</h3>
+          <p>Your progress is saved locally in your browser so you won't lose your checkmarks or question counts when you close the tab.</p>
+          <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="exportData()">💾 Export Full Backup (.json)</button>
+            <button id="reset-all-btn" class="btn btn-outline text-danger" style="border-color: var(--danger); color: var(--danger);">⚠️ Reset All Progress</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>SSC CHSL Tier 1 • 28-Day Preparation Tracker</div>
+      <div class="footer-quote">"Discipline today creates selection tomorrow."</div>
+      <div>100% Offline Capable • LocalStorage Enabled</div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
